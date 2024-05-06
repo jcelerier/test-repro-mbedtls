@@ -11,29 +11,27 @@ jobs:
           xcode-version: latest-stable
       - name: Test
         run: |
-    
           python3 -m venv .
           source ./bin/activate
           pip3 install jinja2
-          git clone https://github.com/Mbed-TLS/mbedtls || true
+          git clone --recursive -j8 https://github.com/Mbed-TLS/mbedtls || true
           (
             cd mbedtls
             python -m pip install -r scripts/basic.requirements.txt
         
             echo "#define MBEDTLS_SSL_DTLS_SRTP" >> include/mbedtls/mbedtls_config.h
-            
-            mkdir build
-            cd build
-            cmake .. \
-              -DCMAKE_INSTALL_PREFIX=$BUILD_DIR \
-              -DCMAKE_PREFIX_PATH=$BUILD_DIR \
-              -DCMAKE_C_FLAGS="$OPT_FLAGS" \
-              -DCMAKE_CXX_FLAGS="$OPT_FLAGS" \
-              -DCMAKE_BUILD_TYPE=Release \
-              -DENABLE_PROGRAMS=0 \
-              -DBUILD_SHARED_LIBS=0 \
-              -DMBEDTLS_FATAL_WARNINGS=0 \
-              -DENABLE_TESTING=0
-        
-              make install
           )
+
+          cmake -S mbedtls -B build \
+            -DCMAKE_INSTALL_PREFIX=$BUILD_DIR \
+            -DCMAKE_PREFIX_PATH=$BUILD_DIR \
+            -DCMAKE_C_FLAGS="$OPT_FLAGS" \
+            -DCMAKE_CXX_FLAGS="$OPT_FLAGS" \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DENABLE_PROGRAMS=0 \
+            -DBUILD_SHARED_LIBS=0 \
+            -DMBEDTLS_FATAL_WARNINGS=0 \
+            -DENABLE_TESTING=0
+        
+          
+           cmake --build build --target install
