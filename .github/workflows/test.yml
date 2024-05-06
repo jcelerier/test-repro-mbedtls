@@ -11,6 +11,9 @@ jobs:
           xcode-version: latest-stable
       - name: Test
         run: |
+    
+          python3 -m venv .
+          source ./bin/activate
           pip3 install jinja2
           git clone https://github.com/Mbed-TLS/mbedtls || true
           (
