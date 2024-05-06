@@ -31,7 +31,7 @@ jobs:
             -DENABLE_PROGRAMS=0 \
             -DBUILD_SHARED_LIBS=0 \
             -DMBEDTLS_FATAL_WARNINGS=0 \
-            -DENABLE_TESTING=0
+            -DENABLE_TESTING=0 -DCMAKE_INSTALL_PREFIX=foo
         
           
            cmake --build build --target install
