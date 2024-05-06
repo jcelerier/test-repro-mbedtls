@@ -11,7 +11,6 @@ jobs:
           xcode-version: latest-stable
       - name: Test
         run: |
-          ./ci/osx-brew.deps.sh
           pip3 install jinja2
           git clone https://github.com/Mbed-TLS/mbedtls || true
           (
